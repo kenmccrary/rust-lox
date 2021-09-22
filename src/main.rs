@@ -2,7 +2,10 @@ use crate::scanner::Scanner;
 use std::io::{BufRead, Write};
 use std::{env, fs, io};
 
+mod expr;
+mod parser;
 mod scanner;
+mod lib;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -44,10 +47,4 @@ fn run(source: String) {
     }
 }
 
-fn error(line: usize, message: &str) {
-        report(line, "".to_string(), message);
-}
 
-fn report(line: usize, which: String, message: &str) {
-    println!("[line: {}] Error: {} : {}", line, which, message);
-}

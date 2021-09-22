@@ -1,10 +1,11 @@
 use crate::scanner::TokenType::*;
+use crate::lib::error;
+
 use std::collections::HashMap;
 
-use crate::error;
 
-#[derive(Clone, Debug)]
-enum TokenType {
+#[derive(Clone, PartialEq, Debug)]
+pub enum TokenType {
     // Single-character tokens.
     LeftParen,
     RightParen,
@@ -54,11 +55,24 @@ enum TokenType {
     Eof,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Token {
     token_type: TokenType,
     lexeme: String,
     line: usize,
+}
+
+impl Token {
+    pub fn token_type(&self) -> &TokenType {
+        &self.token_type
+    }
+
+    pub fn lexeme(&self) -> &str {
+        &self.lexeme
+    }
+    pub fn line(&self) -> usize {
+        self.line
+    }
 }
 
 pub struct Scanner {
@@ -72,24 +86,23 @@ pub struct Scanner {
 
 impl Scanner {
     pub fn new(source: String) -> Scanner {
-
         let mut keywords = HashMap::new();
-        keywords.insert("and".to_string(),    And);
-        keywords.insert("class".to_string(),    Class);
-        keywords.insert("else".to_string(),    Else);
-        keywords.insert("false".to_string(),    False);
-        keywords.insert("for".to_string(),    For);
-        keywords.insert("fun".to_string(),    Fun);
-        keywords.insert("if".to_string(),    If);
-        keywords.insert("nil".to_string(),    Nil);
-        keywords.insert("or".to_string(),    Or);
-        keywords.insert("print".to_string(),    Print);
-        keywords.insert("return".to_string(),    Return);
-        keywords.insert("super".to_string(),    Super);
-        keywords.insert("this".to_string(),    This);
-        keywords.insert("true".to_string(),    True);
-        keywords.insert("var".to_string(),    Var);
-        keywords.insert("while".to_string(),    While);
+        keywords.insert("and".to_string(), And);
+        keywords.insert("class".to_string(), Class);
+        keywords.insert("else".to_string(), Else);
+        keywords.insert("false".to_string(), False);
+        keywords.insert("for".to_string(), For);
+        keywords.insert("fun".to_string(), Fun);
+        keywords.insert("if".to_string(), If);
+        keywords.insert("nil".to_string(), Nil);
+        keywords.insert("or".to_string(), Or);
+        keywords.insert("print".to_string(), Print);
+        keywords.insert("return".to_string(), Return);
+        keywords.insert("super".to_string(), Super);
+        keywords.insert("this".to_string(), This);
+        keywords.insert("true".to_string(), True);
+        keywords.insert("var".to_string(), Var);
+        keywords.insert("while".to_string(), While);
 
         Scanner {
             source,
@@ -170,7 +183,7 @@ impl Scanner {
 
             '\"' => self.string_literal(),
 
-            '0'..='9'  => self.number_literal(),
+            '0'..='9' => self.number_literal(),
 
             'a'..='z' | 'A'..='Z' => self.identifier(),
 
@@ -183,7 +196,6 @@ impl Scanner {
     }
 
     fn identifier(&mut self) {
-
         while self.peek().is_alphanumeric() {
             self.advance();
         }
