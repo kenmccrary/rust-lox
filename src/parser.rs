@@ -28,7 +28,10 @@ impl Parser {
         }
     }
 
-    // TODO finish expression and equality
+    pub fn parse(&mut self) -> Option<Expression>{
+        Some(self.expression())
+    }
+
     fn expression(&mut self) -> Expression {
         self.equality()
     }
@@ -129,7 +132,10 @@ impl Parser {
             return Box::new(group);
         }
 
-        panic!("Parser failed.")
+        // FIX
+        let token = self.peek().clone();
+        self.parser_error(&token, "Expect Expression".to_string());
+        panic!("fix");
     }
 
 
@@ -180,7 +186,7 @@ impl Parser {
         self.tokens.get(self.current - 1).unwrap()
     }
 
-    fn parser_error(token: Token, message: String) {
+    fn parser_error(&mut self, token: &Token, message: String) {
         if *token.token_type() == Eof {
             report(token.line(), "at end".to_string(), &message);
         } else {
@@ -188,5 +194,10 @@ impl Parser {
                    "at '".to_string() + token.lexeme() + "'" ,
                    &message);
         }
+    }
+
+    // TODO
+    fn synchronize() {
+        // In the book an exception is thrown in error recovery so we need an alternative in Rust
     }
 }

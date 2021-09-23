@@ -1,6 +1,7 @@
 use crate::scanner::Scanner;
 use std::io::{BufRead, Write};
 use std::{env, fs, io};
+use crate::parser::Parser;
 
 mod expr;
 mod parser;
@@ -40,6 +41,8 @@ fn run_file(path: &String) {
 fn run(source: String) {
     let mut scanner = Scanner::new(source);
     let tokens = scanner.scan_tokens();
+    let mut parser = Parser::new(tokens.clone());
+    let expression = parser.parse();
 
     // For now, just print the tokens
     for token in tokens {
