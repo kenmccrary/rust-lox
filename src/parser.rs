@@ -163,7 +163,9 @@ impl Parser {
             return false;
         }
 
-        self.peek().token_type() == token_type
+        let found_type = self.peek().token_type();
+        let answer = found_type == token_type;
+        answer
     }
 
     fn advance(&mut self) -> &Token {

@@ -4,7 +4,7 @@ use crate::lib::error;
 use std::collections::HashMap;
 
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, Debug)]
 pub enum TokenType {
     // Single-character tokens.
     LeftParen,
@@ -54,6 +54,35 @@ pub enum TokenType {
 
     Eof,
 }
+
+
+impl PartialEq for TokenType {
+    fn eq(&self, other: &Self) -> bool {
+
+        // A TokenType matches another if it is the same variant regardless of whether
+        // the data associated with the variont is the same
+
+        match (self) {
+
+            TokenType::Identifier(_) => match(other ) {
+                TokenType::Identifier(_) => true,
+                _ => false,
+            },
+            TokenType::StringLiteral(_) => match(other ) {
+                TokenType::StringLiteral(_) => true,
+                _ => false,
+            },
+            TokenType::Number(_) => match(other ) {
+                TokenType::Number(_) => true,
+                _ => false,
+            },
+
+
+            _ =>  matches!(self, other)
+        }
+    }
+}
+
 
 #[derive(Clone, Debug)]
 pub struct Token {
