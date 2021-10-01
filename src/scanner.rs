@@ -59,28 +59,223 @@ pub enum TokenType {
 impl PartialEq for TokenType {
     fn eq(&self, other: &Self) -> bool {
 
+        let mut result = false;
+
         // A TokenType matches another if it is the same variant regardless of whether
         // the data associated with the variont is the same
 
-        match (self) {
+        if let lhs = self {
+            if let rhs = other {
+                println!("{:?} == {:?}", lhs, rhs);
+            }
+        }
+        result = match self {
 
             TokenType::Identifier(_) => match(other ) {
-                TokenType::Identifier(_) => true,
-                _ => false,
+                TokenType::Identifier(_) =>  true,
+                _ =>  false,
             },
             TokenType::StringLiteral(_) => match(other ) {
-                TokenType::StringLiteral(_) => true,
-                _ => false,
+                TokenType::StringLiteral(_) =>  true,
+                _ =>  false,
             },
-            TokenType::Number(_) => match(other ) {
-                TokenType::Number(_) => true,
-                _ => false,
+            TokenType::Number(_) => match(other) {
+                TokenType::Number(_) =>  true,
+                _ =>  false,
+            },
+
+            TokenType::LeftParen => match other {
+            TokenType::LeftParen =>  true,
+            _ =>  false,
+            },
+
+            TokenType::RightParen => match other {
+                TokenType::RightParen =>  true,
+                _ =>  false,
+            },
+
+            TokenType::LeftBrace => match other {
+                TokenType::LeftBrace =>  true,
+                _ =>  false,
+            },
+
+            TokenType::RightBrace => match other {
+                TokenType::RightBrace =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Comma => match other {
+                TokenType::Comma =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Dot => match other {
+                TokenType::Dot =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Minus => match other {
+                TokenType::Minus =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Plus => match other {
+                TokenType::Plus =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Semicolon => match other {
+                TokenType::Semicolon =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Slash => match other {
+                TokenType::Slash =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Star => match other {
+                TokenType::Star =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Bang => match other {
+                TokenType::Bang =>  true,
+                _ =>  false,
             },
 
 
-            _ =>  matches!(self, other)
-        }
-    }
+            TokenType::BangEqual => match other {
+                TokenType::BangEqual =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Equal => match other {
+                TokenType::Equal =>  true,
+                _ =>  false,
+            },
+
+            TokenType::EqualEqual => match other {
+                TokenType::EqualEqual =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Greater => match other {
+                TokenType::Greater =>  true,
+                _ =>  false,
+            },
+
+            TokenType::GreaterEqual => match other {
+                TokenType::GreaterEqual =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Less => match other {
+                TokenType::Less =>  true,
+                _ =>  false,
+            },
+
+            TokenType::LessEqual => match other {
+                TokenType::LessEqual =>  true,
+                _ =>  false,
+            },
+
+            TokenType::And => match other {
+                TokenType::And =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Class => match other {
+                TokenType::Class =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Else => match other {
+                TokenType::Else =>  true,
+                _ =>  false,
+            },
+
+            TokenType::False => match other {
+                TokenType::False =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Fun => match other {
+                TokenType::Fun =>  true,
+                _ =>  false,
+            },
+
+            TokenType::For => match other {
+                TokenType::For =>  true,
+                _ =>  false,
+            },
+
+            TokenType::If => match other {
+                TokenType::If =>  true,
+                _ =>  false,
+            },
+
+            TokenType::If => match other {
+                TokenType::If =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Nil => match other {
+                TokenType::Nil =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Or => match other {
+                TokenType::Or =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Print => match other {
+                TokenType::Print =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Return => match other {
+                TokenType::Return =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Super => match other {
+                TokenType::Super =>  true,
+                _ =>  false,
+            },
+
+            TokenType::This => match other {
+                TokenType::This =>  true,
+                _ =>  false,
+            },
+
+            TokenType::True => match other {
+                TokenType::True =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Var => match other {
+                TokenType::Var =>  true,
+                _ =>  false,
+            },
+
+            TokenType::While => match other {
+                TokenType::While =>  true,
+                _ =>  false,
+            },
+
+            TokenType::Eof => match other {
+                TokenType::Eof =>  true,
+                _ =>  false,
+            },
+
+        };
+
+
+        println!("returning: {}", result);
+        return result;
+   }
 }
 
 

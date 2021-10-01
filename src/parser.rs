@@ -2,6 +2,7 @@ use crate::expr::{Expression, Expr, BooleanLiteral, NilLiteral, GroupingExpr, Un
 use crate::scanner::TokenType::*;
 use crate::scanner::{Token, TokenType};
 use crate::lib::report;
+use std::rc::Rc;
 
 /*
 expression     → equality ;
@@ -42,7 +43,7 @@ impl Parser {
         while self.match_token(&[BangEqual, EqualEqual]) {
             let operator = (*self.previous()).clone();
             let right = self.term();
-            expr = Box::new(BinaryExpr::new(expr, operator, right));
+            expr = Rc::new(BinaryExpr::new(expr, operator, right));
         }
 
         expr
@@ -54,7 +55,7 @@ impl Parser {
         while self.match_token(&[Greater, GreaterEqual, Less, LessEqual]) {
             let operator = (*self.previous()).clone();
             let right = self.term();
-            expr = Box::new(BinaryExpr::new(expr, operator, right));
+            expr = Rc::new(BinaryExpr::new(expr, operator, right));
         }
 
         expr
@@ -66,7 +67,7 @@ impl Parser {
         while self.match_token(&[Plus, Minus]) {
             let operator = (*self.previous()).clone();
             let right = self.factor();
-            expr = Box::new(BinaryExpr::new(expr, operator, right));
+            expr = Rc::new(BinaryExpr::new(expr, operator, right));
         }
 
         expr
@@ -78,7 +79,7 @@ impl Parser {
         while self.match_token(&[Slash, Star]) {
             let operator = (*self.previous()).clone();
             let right = self.unary();
-            expr = Box::new(BinaryExpr::new(expr, operator, right));
+            expr = Rc::new(BinaryExpr::new(expr, operator, right));
         }
 
         expr
@@ -88,7 +89,7 @@ impl Parser {
         if self.match_token(&[Bang, Minus]) {
             let operator = (*self.previous()).clone();
             let right = self.unary();
-            return Box::new(UnaryExpr{operator, right});
+            return Rc::new(UnaryExpr{operator, right});
         }
 
         self.primary()
@@ -97,22 +98,22 @@ impl Parser {
     fn primary(&mut self) -> Expression {
 
         if self.match_token(&[False]) {
-            return Box::new(BooleanLiteral{ value: false })
+            return Rc::new(BooleanLiteral{ value: false })
         }
 
         if self.match_token(&[True]) {
-            return Box::new(BooleanLiteral{ value: true })
+            return Rc::new(BooleanLiteral{ value: true })
         }
 
         if self.match_token(&[Nil]) {
-            return Box::new(NilLiteral{} )
+            return Rc::new(NilLiteral{} )
         }
 
         if self.match_token(&[Number(0f32)]) {
             let number = (*self.previous()).clone();
 
            if let Number(value) = number.token_type() {
-                return Box::new(NumberLiteral{value : *value});
+                return Rc::new(NumberLiteral{value : *value});
             }
         }
 
@@ -120,16 +121,15 @@ impl Parser {
             let number = (*self.previous()).clone();
 
             if let Number(value) = number.token_type() {
-                return Box::new(NumberLiteral{value : *value});
+                return Rc::new(NumberLiteral{value : *value});
             }
         }
-
 
         if self.match_token(&[LeftParen]) {
 
             let group = GroupingExpr::new(self.expression());
             self.consume_token(RightParen, "Expect ')' after expression");
-            return Box::new(group);
+            return Rc::new(group);
         }
 
         // FIX

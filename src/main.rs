@@ -2,11 +2,14 @@ use crate::scanner::Scanner;
 use std::io::{BufRead, Write};
 use std::{env, fs, io};
 use crate::parser::Parser;
+use crate::interpreter::Interpreter;
 
-mod expr;
-mod parser;
-mod scanner;
 mod lib;
+mod expr;
+mod scanner;
+mod parser;
+mod interpreter;
+mod lox_object;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -43,11 +46,15 @@ fn run(source: String) {
     let tokens = scanner.scan_tokens();
     let mut parser = Parser::new(tokens.clone());
     let expression = parser.parse();
+    let interpreter = Interpreter::new();
+    interpreter.interpret(expression.unwrap());
 
     // For now, just print the tokens
+    /*
     for token in tokens {
         println!("{:?}", token);
     }
+    */
 }
 
 
