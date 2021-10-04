@@ -287,8 +287,8 @@ pub struct Token {
 }
 
 impl Token {
-    pub fn token_type(&self) -> &TokenType {
-        &self.token_type
+    pub fn token_type(&self) -> TokenType {
+        self.token_type.clone()
     }
 
     pub fn lexeme(&self) -> &str {

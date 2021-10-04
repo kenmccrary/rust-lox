@@ -1,4 +1,4 @@
-use crate::expr::{Expression, Expr, BooleanLiteral, NilLiteral, GroupingExpr, UnaryExpr, BinaryExpr, NumberLiteral};
+use crate::expr::{Expression, Expr, BooleanLiteral, NilLiteral, GroupingExpr, UnaryExpr, BinaryExpr, NumberLiteral, StringLiteral};
 use crate::scanner::TokenType::*;
 use crate::scanner::{Token, TokenType};
 use crate::lib::report;
@@ -113,15 +113,15 @@ impl Parser {
             let number = (*self.previous()).clone();
 
            if let Number(value) = number.token_type() {
-                return Rc::new(NumberLiteral{value : *value});
+                return Rc::new(NumberLiteral{value : value});
             }
         }
 
         if self.match_token(&[StringLiteral("".parse().unwrap())]) {
-            let number = (*self.previous()).clone();
+            let string = (*self.previous()).clone();
 
-            if let Number(value) = number.token_type() {
-                return Rc::new(NumberLiteral{value : *value});
+            if let StringLiteral(value) = string.token_type() {
+                return Rc::new(StringLiteral{value : value});
             }
         }
 
@@ -141,7 +141,7 @@ impl Parser {
 
     fn match_token(&mut self, types: &[TokenType]) -> bool {
         for token_type in types {
-            if self.check(token_type) {
+            if self.check(token_type.clone()) {
                 self.advance();
                 return true;
             }
@@ -151,14 +151,14 @@ impl Parser {
     }
 
     fn consume_token(&mut self, token_type: TokenType, message: &str) -> &Token {
-        if self.check(&token_type) {
+        if self.check(token_type) {
             return self.advance();
         }
 
         panic!("Parser error: {}", message);
     }
 
-    fn check(&mut self, token_type: &TokenType) -> bool {
+    fn check(&mut self, token_type: TokenType) -> bool {
         if self.is_at_end() {
             return false;
         }
@@ -177,7 +177,7 @@ impl Parser {
     }
 
     fn is_at_end(&mut self) -> bool {
-        *self.peek().token_type() == Eof
+        self.peek().token_type() == Eof
     }
 
     fn peek(&mut self) -> &Token {
@@ -189,7 +189,7 @@ impl Parser {
     }
 
     fn parser_error(&mut self, token: &Token, message: String) {
-        if *token.token_type() == Eof {
+        if token.token_type() == Eof {
             report(token.line(), "at end".to_string(), &message);
         } else {
             report(token.line(),

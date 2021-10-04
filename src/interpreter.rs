@@ -1,6 +1,6 @@
 use crate::expr::{Expression, UnaryExpr, ExpressionProcessor, BinaryExpr, GroupingExpr, StringLiteral, NumberLiteral, NilLiteral};
 use crate::lox_object::LoxObject;
-use crate::scanner::TokenType::*;
+use crate::scanner::TokenType::{*};
 use crate::scanner::{Token, TokenType};
 
 pub struct Interpreter {
@@ -32,13 +32,13 @@ impl ExpressionProcessor for Interpreter {
 
         match unaryExpr.operator.token_type() {
 
-            MINUS => return LoxObject::Number(-object.to_number()),
+            TokenType::Minus => return LoxObject::Number(-object.to_number()),
 
-            BANG => return LoxObject::Boolean(!object.is_truthy()),
+            TokenType::Bang => return LoxObject::Boolean(!object.is_truthy()),
 
+            _ => panic!("processUnaryExpr")
         }
 
-        panic!("oh hell");
 
     }
 
@@ -46,22 +46,38 @@ impl ExpressionProcessor for Interpreter {
         let left = self.evaluate(binaryExpr.left.clone());
         let right = self.evaluate(binaryExpr.right.clone());
 
+        let x = binaryExpr.operator.token_type();
         match binaryExpr.operator.token_type() {
 
-            MINUS => return LoxObject::Number(left.to_number() - right.to_number()),
+            TokenType::Minus => return LoxObject::Number(left.to_number() - right.to_number()),
 
             // TODO handle String type
-            PLUS => {
-                let leftNum = left.to_number();
+            TokenType::Plus => {
+                /*   let leftNum = left.to_number();
                 let rightNum = right.to_number();
-                return LoxObject::Number(leftNum + rightNum);
-            },
+                return LoxObject::Number(leftNum + rightNum); */
+
+                if let LoxObject::Number(leftNum) = left {
+                    if let LoxObject::Number(rightNum) = right {
+                        return LoxObject::Number(leftNum + rightNum);
+                    }
+                    todo!() // syntax error
+                }
+
+                if let LoxObject::String(leftStr) = left {
+                    if let LoxObject::String(rightStr) = right {
+                        return LoxObject::String(format!("{}{}", leftStr, rightStr));
+                    }
+                    todo!() // syntax error
+                }
+
+                todo!() // syntax error
+            }
 
 
+            TokenType::Slash => return LoxObject::Number(left.to_number() / right.to_number()),
 
-            SLASH => return LoxObject::Number(left.to_number() / right.to_number()),
-
-            STAR => return LoxObject::Number(left.to_number() * right.to_number()),
+            TokenType::Star => return LoxObject::Number(left.to_number() * right.to_number()),
 
             _ => panic!("SDfsdf"),
         }
@@ -72,7 +88,7 @@ impl ExpressionProcessor for Interpreter {
     }
 
     fn processStringLiteralExpr(&self, stringLiteralExpr: &StringLiteral) -> LoxObject {
-        todo!()
+        return LoxObject::String(stringLiteralExpr.value.clone());
     }
 
     fn processNumberLiteralExpr(&self, numberLiteralExpr: &NumberLiteral) -> LoxObject {

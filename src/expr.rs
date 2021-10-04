@@ -80,7 +80,7 @@ impl LiteralExpr for BooleanLiteral {}
 // StringLiteral Expressions -------------------------------------------------------------------
 
 pub struct StringLiteral {
-    value: String,
+    pub(crate) value: String,
 }
 
 //impl Expr for StringLiteral {}
