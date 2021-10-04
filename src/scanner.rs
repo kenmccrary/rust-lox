@@ -415,7 +415,7 @@ impl Scanner {
 
             '\n' => self.line = self.line + 1,
 
-            _ => error(self.line, "Unexpected charater"),
+            _ => error(self.line, "Unexpected character"),
         }
     }
 
@@ -461,7 +461,15 @@ impl Scanner {
             self.advance();
         }
 
-        let value = &self.source[self.start + 1..=self.current - 1];
+        if (self.is_at_end()) {
+            error(self.line, "Unterminated string.");
+            return;
+        }
+
+        // the closing "
+        self.advance();
+
+        let value = &self.source[self.start + 1..self.current - 1];
         self.add_token(StringLiteral(value.to_string()));
     }
 
