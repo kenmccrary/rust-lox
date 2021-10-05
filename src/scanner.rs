@@ -59,7 +59,7 @@ pub enum TokenType {
 impl PartialEq for TokenType {
     fn eq(&self, other: &Self) -> bool {
 
-        let mut result = false;
+        //let mut result = false;
 
         // A TokenType matches another if it is the same variant regardless of whether
         // the data associated with the variont is the same
@@ -69,17 +69,17 @@ impl PartialEq for TokenType {
                 println!("{:?} == {:?}", lhs, rhs);
             }
         }
-        result = match self {
+        let result = match self {
 
-            TokenType::Identifier(_) => match(other ) {
+            TokenType::Identifier(_) => match other  {
                 TokenType::Identifier(_) =>  true,
                 _ =>  false,
             },
-            TokenType::StringLiteral(_) => match(other ) {
+            TokenType::StringLiteral(_) => match other  {
                 TokenType::StringLiteral(_) =>  true,
                 _ =>  false,
             },
-            TokenType::Number(_) => match(other) {
+            TokenType::Number(_) => match other  {
                 TokenType::Number(_) =>  true,
                 _ =>  false,
             },
@@ -461,7 +461,7 @@ impl Scanner {
             self.advance();
         }
 
-        if (self.is_at_end()) {
+        if self.is_at_end() {
             error(self.line, "Unterminated string.");
             return;
         }

@@ -1,4 +1,4 @@
-use crate::expr::{Expression, Expr, BooleanLiteral, NilLiteral, GroupingExpr, UnaryExpr, BinaryExpr, NumberLiteral, StringLiteral};
+use crate::expr::{Expression, BooleanLiteral, NilLiteral, GroupingExpr, UnaryExpr, BinaryExpr, NumberLiteral, StringLiteral};
 use crate::scanner::TokenType::*;
 use crate::scanner::{Token, TokenType};
 use crate::lib::report;

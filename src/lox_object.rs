@@ -36,4 +36,37 @@ impl LoxObject {
             _ => return true,
         }
     }
+
+}
+
+impl PartialEq for LoxObject {
+
+    fn eq(&self, other: &Self) -> bool {
+
+        match self {
+            LoxObject::Boolean(val) => {
+                return *val == other.to_boolean();
+            },
+
+            LoxObject::Number(val) => {
+                return *val == other.to_number();
+            },
+
+            LoxObject::String(val) => {
+                return *val == other.to_string();
+            },
+
+            LoxObject::Nil => {
+                match other {
+                    LoxObject::Nil => {
+                        return true;
+
+                    }
+                    _ => {
+                        return false;
+                    }
+                }
+            },
+        }
+    }
 }
